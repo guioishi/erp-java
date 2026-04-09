@@ -33,36 +33,13 @@ com.senior.erp
 
 # ⚙️ Como rodar o projeto
 
-## 1. Subir banco (Docker)
+docker-compose down -v
 
-```bash
-docker-compose up -d db
-```
+mvn clean package -DskipTests
 
-ou:
+docker-compose build --no-cache
 
-```bash
-docker run --name postgres-erp \
-  -e POSTGRES_DB=erp \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=postgres \
-  -p 5432:5432 \
-  -d postgres
-```
-
----
-
-## 2. Rodar aplicação
-
-```bash
-mvn spring-boot:run
-```
-
-ou:
-
-```bash
-docker-compose up -d
-```
+docker-compose up
 
 ---
 
@@ -311,3 +288,17 @@ docker-compose up -d
 ```
 
 ---
+
+## 🚀 Próximos Passos
+
+- 🔐 Implementar autenticação (JWT)
+  - Login de usuário
+  - Proteção de endpoints
+  - Controle de acesso
+
+- 📚 Melhorar documentação com Swagger
+  - Adicionar descrições nos endpoints (`@Operation`)
+  - Documentar respostas (`@ApiResponse`)
+  - Incluir exemplos nos DTOs (`@Schema`)
+  - Organizar endpoints com tags
+  - Configurar autenticação no Swagger (Bearer Token)
