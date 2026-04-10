@@ -1,7 +1,21 @@
+# ===== STAGE 1: BUILD =====
+FROM maven:3.9.9-eclipse-temurin-21 AS builder
+
+WORKDIR /app
+
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+COPY src ./src
+
+RUN mvn clean package -DskipTests
+
+
+# ===== STAGE 2: RUNTIME =====
 FROM eclipse-temurin:21-jdk-jammy
 
 WORKDIR /app
 
-COPY target/erp-java-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /app/target/*.jar app.jar
 
 ENTRYPOINT ["java", "-jar", "app.jar"]
