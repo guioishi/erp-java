@@ -4,6 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+
+import com.senior.erp.entity.ProductType;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -34,6 +37,37 @@ public class GlobalExceptionHandler {
         body.put("message", ex.getMessage());
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<?> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+
+        if (ex.getRequiredType() == ProductType.class) {
+            return ResponseEntity.badRequest().body(
+                Map.of(
+                    "error", "Validation Error",
+                    "message", "Tipo inválido: " + ex.getValue() + ". Use PRODUCT ou SERVICE"
+                )
+            );
+        }
+
+        return ResponseEntity.badRequest().body(
+            Map.of(
+                "error", "Validation Error",
+                "message", "Parâmetro inválido: " + ex.getName()
+            )
+        );
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<?> handleEnumError(IllegalArgumentException ex) {
+
+        return ResponseEntity.badRequest().body(
+            Map.of(
+                "error", "Validation Error",
+                "message", ex.getMessage()
+            )
+        );
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
