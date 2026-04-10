@@ -51,13 +51,22 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             }
         }
 
+        List<String> allowedSorts = List.of("name", "type", "active", "price");
+
         if (pageable.getSort().isSorted()) {
 
             PathBuilder<Product> entityPath = new PathBuilder<>(Product.class, "product");
 
             pageable.getSort().forEach(sort -> {
 
-                Order direction = sort.isAscending() ? Order.ASC : Order.DESC;
+                if (!allowedSorts.contains(sort.getProperty())) {
+                    return;
+                }
+
+                com.querydsl.core.types.Order direction =
+                        sort.isAscending()
+                                ? com.querydsl.core.types.Order.ASC
+                                : com.querydsl.core.types.Order.DESC;
 
                 ComparableExpressionBase<?> path =
                         entityPath.getComparable(sort.getProperty(), Comparable.class);

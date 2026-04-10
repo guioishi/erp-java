@@ -81,7 +81,6 @@ class ProductServiceTest {
         Product product = new Product();
         product.setId(id);
 
-        // 👇 CORREÇÃO AQUI
         product.getOrderItems().add(mock(com.senior.erp.entity.OrderItem.class));
 
         when(repository.findById(id)).thenReturn(Optional.of(product));
@@ -156,7 +155,6 @@ class ProductServiceTest {
         Product product = new Product();
         product.setId(id);
 
-        // 👇 CORREÇÃO AQUI
         product.getOrderItems().add(mock(com.senior.erp.entity.OrderItem.class));
 
         when(repository.findById(id)).thenReturn(Optional.of(product));
